@@ -31,9 +31,11 @@ const MovieList = (props) => {
                   
                     type="button"
                     className="btn btn-md btn-outline-danger"
+                    data-bs-target="#exampleModal"
                   >
                     Delete
                   </button>
+                  
                   <h2>
                     <span className="badge badge-info bg-primary">{movie.rating}</span>
                   </h2>

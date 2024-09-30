@@ -2,14 +2,11 @@ import React from "react";
 
 
 
+
 const MovieList = (props) => {
 
 
-    // function handleClick(e){
-    // console.log("Button Clicked")
-    //     console.log(e.pageY)
-    // }
-    
+
     return (    
       <div className="row">
 

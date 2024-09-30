@@ -6,7 +6,7 @@ function AddMovie(props) {
   const navigate = useNavigate();
 
   const handleFormSubmit = (e) => {
-    console.log("tttt");
+    console.log();
     e.preventDefault();
     const newMovie = serialize(e.target, { hash: true });
     console.log(newMovie);

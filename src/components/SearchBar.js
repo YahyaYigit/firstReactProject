@@ -6,12 +6,11 @@ function SearchBar(props) {
   const handlFeFormSubmit = (event) => {
     event.preventDefault();
     navigate("/add");
-    console.log("tetst")
   };
 
   return (
     <form onSubmit={handlFeFormSubmit}>
-      <div className="form-row d-flex mb-5">
+      <div className="form-row d-flex mb-3 mt-3">
         <div className="col-10">
           <input
             onChange={props.searchMovieProp}

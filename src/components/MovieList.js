@@ -14,7 +14,7 @@ const MovieList = (props) => {
             <div className="card mb-4 shadow-sm">
               <img
                 src={movie.imageURL}
-                className="card-img-top"
+                className="card-img-top" 
                 alt="Sample Movie"
               ></img>
               <div className="card-body">
@@ -33,7 +33,8 @@ const MovieList = (props) => {
                   </button> */}
 
                   <DeleteModal
-                         deleteMovieProp={props.deleteMovie}
+                         deleteMovieProp={props.deleteMovieProp}
+                         movie={movie}
                   />
                   
                   <h2>

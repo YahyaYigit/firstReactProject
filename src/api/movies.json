@@ -5,35 +5,35 @@
       "name": "The Flash",
       "rating": 8.3,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "https://image.tmdb.org/t/p/w220_and_h330_face/wHa6KOJAoNTFLFtp7wguUJKSnju.jpg"
+      "imageURL": "/images/image-1.jpg"
     },
     {
       "id": "3",
       "name": "Kasırgalar",
       "rating": 7.9,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/hvcTRPDns2VLk12MwKUa1IuCVCe.jpg"
+      "imageURL": "/images/image-2.webp"
     },
     {
       "id": "4",
       "name": "Duchess",
       "rating": 5.2,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/5TR7JlJbKucNSq84rkbnjLd1JB5.jpg"
+      "imageURL": "/images/image-4.webp"
     },
     {
       "id": "5",
       "name": "Suç Kraliçesi",
       "rating": 7.5,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/kACUQNwGMqsbf3fuBEFNwTRgJZV.jpg"
+      "imageURL": "/images/image-5.webp"
     },
     {
       "id": "6",
       "name": "Mayhem!",
       "rating": 4.3,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "https://media.themoviedb.org/t/p/w300_and_h450_bestv2/u9035lysUz3ccloQt0SeIp1Mu8a.jpg"
+      "imageURL": "/images/image-6.webp"
     }
   ]
 }

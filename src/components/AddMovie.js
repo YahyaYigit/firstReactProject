@@ -1,17 +1,23 @@
+// AddMovie.js
 import React from "react";
 import serialize from "form-serialize";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "./imgUpload";
 
 function AddMovie(props) {
   const navigate = useNavigate();
 
   const handleFormSubmit = (e) => {
-    console.log();
     e.preventDefault();
     const newMovie = serialize(e.target, { hash: true });
     console.log(newMovie);
     props.onAddMovie(newMovie);
     navigate("/");
+  };
+
+  const handleImageUpload = (image) => {
+    // Burada resmi işlemek için istediğiniz işlemi yapabilirsiniz
+    console.log("Yüklenen Resim:", image);
   };
 
   return (
@@ -34,12 +40,7 @@ function AddMovie(props) {
             <input type="text" className="form-control" name="rating" />
           </div>
         </div>
-        <div className="form-row">
-          <div className="form-group col-md-12">
-            <label htmlFor="inputImage">Image URL</label>
-            <input type="text" className="form-control" name="imageURL" />
-          </div>
-        </div>
+        <ImageUpload onImageUpload={handleImageUpload} /> {/* Burada onImageUpload propunu geçiyoruz */}
         <div className="form-row">
           <div className="form-group col-md-12">
             <label htmlFor="overviewTextarea">Overview</label>

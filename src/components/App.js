@@ -9,6 +9,9 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
+import BackToTopButton from "./BackToTopButton";
+
+
 
 function App() {
 
@@ -72,6 +75,7 @@ function App() {
                   movies={filteredMovies}
                   deleteMovieProp={deleteMovie}
                 />
+                <BackToTopButton />
               </React.Fragment>
             }
           />
@@ -81,7 +85,7 @@ function App() {
               <AddMovie
                 onAddMovie={(movie) => {
                 addMovie(movie);
-                  <useNavigate to="/" replace={true} />; // navigate to home page after adding the movie
+                  <useNavigate to="/" replace={true} />; 
                 }}
               />
             }

@@ -1,11 +1,10 @@
 import React from "react";
+import DeleteModal from "./DeleteModal";
 
 
 
 
 const MovieList = (props) => {
-
-
 
     return (    
       <div className="row">
@@ -22,7 +21,7 @@ const MovieList = (props) => {
                 <h5 className="card-title">{movie.name}</h5>
                 <p className="card-text">{movie.overview}</p>
                 <div className="d-flex justify-content-between align-items-center">
-                  <button
+                  {/* <button
 
                   onClick={(event) => props.deleteMovieProp(movie)}
                   
@@ -31,7 +30,11 @@ const MovieList = (props) => {
                     data-bs-target="#exampleModal"
                   >
                     Delete
-                  </button>
+                  </button> */}
+
+                  <DeleteModal
+                         deleteMovieProp={props.deleteMovie}
+                  />
                   
                   <h2>
                     <span className="badge badge-info bg-primary">{movie.rating}</span>
@@ -48,3 +51,5 @@ const MovieList = (props) => {
 
 
 export default MovieList;
+
+

@@ -34,7 +34,6 @@ const BackToTopButton = () => {
         position: 'fixed',
         bottom: '20px',
         right: '20px',
-        display: isVisible ? 'block' : 'none', // Butonu yalnızca görünür olduğunda göster
         width: '50px', // Butonun genişliği
         height: '50px', // Butonun yüksekliği
         borderRadius: '50%', // Yuvarlak hale getirme

@@ -13,6 +13,8 @@ import BackToTopButton from "./BackToTopButton";
 
 
 
+
+
 function App() {
 
 
@@ -40,6 +42,11 @@ function App() {
     const newMovieList = movies.filter((m) => m.id !== movie.id);
     setMovies(newMovieList);
   };
+
+  const categories = ["heyecan", "gerilim", "korku"];
+
+
+
 
   const searchMovie = (event) => {
     setSearchQuery(event.target.value);
@@ -72,8 +79,9 @@ function App() {
                   </div>
                 </div>
                 <MovieList
-                  movies={filteredMovies}
-                  deleteMovieProp={deleteMovie}
+                    movies={filteredMovies}
+                    categories={categories} // Kategorileri geçir
+                    deleteMovieProp={deleteMovie}
                 />
                 <BackToTopButton />
               </React.Fragment>

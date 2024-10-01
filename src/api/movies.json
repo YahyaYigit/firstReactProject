@@ -5,35 +5,40 @@
       "name": "The Flash",
       "rating": 8.3,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "/images/image-1.jpg"
+      "imageURL": "/images/image-1.jpg",
+      "category": "heyecan"
     },
     {
       "id": "3",
       "name": "Kasırgalar",
       "rating": 7.9,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "/images/image-2.webp"
+      "imageURL": "/images/image-2.webp",
+      "category": "korku"
     },
     {
       "id": "4",
       "name": "Duchess",
       "rating": 5.2,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "/images/image-4.webp"
+      "imageURL": "/images/image-4.webp",
+      "category": "gerilim"
     },
     {
       "id": "5",
       "name": "Suç Kraliçesi",
       "rating": 7.5,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "/images/image-5.webp"
+      "imageURL": "/images/image-5.webp",
+      "category": "heyecan"
     },
     {
       "id": "6",
       "name": "Mayhem!",
       "rating": 4.3,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
-      "imageURL": "/images/image-6.webp"
+      "imageURL": "/images/image-6.webp",
+      "category": "gerilim"
     }
   ]
 }

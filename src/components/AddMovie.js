@@ -1,7 +1,6 @@
-// AddMovie.js
 import React from "react";
-import serialize from "form-serialize";
 import { useNavigate } from "react-router-dom";
+import serialize from "form-serialize";
 import ImageUpload from "./imgUpload";
 
 function AddMovie(props) {
@@ -10,18 +9,28 @@ function AddMovie(props) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const newMovie = serialize(e.target, { hash: true });
-    console.log(newMovie);
     props.onAddMovie(newMovie);
-    navigate("/");
+    navigate("/"); // Form gönderildikten sonra anasayfaya yönlendirme
   };
 
   const handleImageUpload = (image) => {
-    // Burada resmi işlemek için istediğiniz işlemi yapabilirsiniz
     console.log("Yüklenen Resim:", image);
+  };
+
+  const handleGoBack = () => {
+    navigate(-1); // Bir önceki sayfaya geri dön
   };
 
   return (
     <div className="container">
+      <button 
+        type="button" 
+        className="btn-close" 
+        aria-label="Close" 
+        onClick={handleGoBack}
+        style={{ position: 'absolute', top: '60px', left: '150px', fontSize:'30px'}} // Simgenin konumunu ayarlıyoruz
+      ></button>
+
       <form className="mt-5" onSubmit={handleFormSubmit}>
         <input
           className="form-control"
@@ -40,7 +49,20 @@ function AddMovie(props) {
             <input type="text" className="form-control" name="rating" />
           </div>
         </div>
-        <ImageUpload onImageUpload={handleImageUpload} /> {/* Burada onImageUpload propunu geçiyoruz */}
+        
+        {/* Kategori Seçimi */}
+        <div className="form-group">
+          <label htmlFor="inputCategory">Category</label>
+          <select className="form-control" name="category">
+            <option value="">Select Category</option>
+            <option value="Heyecan">Heyecan</option>
+            <option value="Gerilim">Gerilim</option>
+            <option value="Korku">Korku</option>
+          </select>
+        </div>
+
+        <ImageUpload onImageUpload={handleImageUpload} />
+        
         <div className="form-row">
           <div className="form-group col-md-12">
             <label htmlFor="overviewTextarea">Overview</label>

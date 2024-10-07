@@ -10,19 +10,11 @@ import {
   useNavigate,
 } from "react-router-dom";
 import BackToTopButton from "./BackToTopButton";
-
-
-
-
+import FaqCom from "./FaqCom";
 
 function App() {
-
-
-  const [movies,setMovies]=useState([]);
-  const [searchQuery,setSearchQuery]=useState("");
-
-  
-
+  const [movies, setMovies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -31,11 +23,8 @@ function App() {
       setMovies(response.data);
     };
 
-    
-
     fetchMovies();
   }, []);
-  
 
   const deleteMovie = async (movie) => {
     await axios.delete(`http://localhost:3002/movies/${movie.id}`);
@@ -45,23 +34,19 @@ function App() {
 
   const categories = ["heyecan", "gerilim", "korku"];
 
-
-
-
   const searchMovie = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const addMovie = async (movie) => {
     await axios.post(`http://localhost:3002/movies/`, movie);
-    setMovies((prevMovies) => [...prevMovies, movie])
+    setMovies((prevMovies) => [...prevMovies, movie]);
   };
 
   let filteredMovies = movies.filter((movie) => {
     return (
       movie.name &&
-      movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !==
-        -1
+      movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
     );
   });
 
@@ -79,10 +64,12 @@ function App() {
                   </div>
                 </div>
                 <MovieList
-                    movies={filteredMovies}
-                    categories={categories} // Kategorileri geçir
-                    deleteMovieProp={deleteMovie}
+                  movies={filteredMovies}
+                  categories={categories} // Kategorileri geçir
+                  deleteMovieProp={deleteMovie}
                 />
+                <FaqCom />
+
                 <BackToTopButton />
               </React.Fragment>
             }
@@ -92,8 +79,8 @@ function App() {
             element={
               <AddMovie
                 onAddMovie={(movie) => {
-                addMovie(movie);
-                  <useNavigate to="/" replace={true} />; 
+                  addMovie(movie);
+                  <useNavigate to="/" replace={true} />;
                 }}
               />
             }

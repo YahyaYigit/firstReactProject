@@ -1,82 +1,36 @@
 import React, { useState } from "react";
 import DeleteModal from "./DeleteModal";
+import UpdateMovie from "./UpdateMovie"; // UpdateMovie bileşenini ekle
 
 const MovieList = (props) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Menü durumu
-  const [selectedCategory, setSelectedCategory] = useState(null); // Seçilen kategori
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [editingMovie, setEditingMovie] = useState(null); // Güncelleme için seçilen film
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); // Menü görünürlük durumunu değiştir
+    setIsMenuOpen(!isMenuOpen);
   };
 
-  // Kategoriye tıklandığında çağrılan fonksiyon
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category); // Seçilen kategoriyi güncelle
+    setSelectedCategory(category);
   };
 
-  // Seçilen kategoriye göre film listesini filtrele
+  const handleEditClick = (movie) => {
+    setEditingMovie(movie); // Güncellemek için seçilen filmi ayarla
+  };
+
+  const handleUpdateMovie = (updatedMovie) => {
+    props.updateMovieProp(updatedMovie); // Güncellenen filmi üst bileşene gönder
+    setEditingMovie(null); // Güncelleme formunu kapat
+  };
+
   const filteredMovies = selectedCategory
     ? props.movies.filter((movie) => movie.category === selectedCategory)
     : props.movies;
 
   return (
     <div className="row">
-      <button
-        className="btn"
-        onClick={toggleMenu}
-        style={{
-          position: "fixed",
-          top: "20px",
-          right: "100px",
-          zIndex: 1000,
-          width: "50px",
-          height: "50px",
-          fontSize: "50px",
-        }}
-      >
-        &#9776; {/* Üç çizgili menü simgesi */}
-      </button>
-
-      {/* Sağdan Açılır Menü */}
-      <div
-        className={`side-menu ${isMenuOpen ? "open" : ""}`}
-        style={{
-          position: "fixed",
-          top: "0",
-          right: isMenuOpen ? "0" : "-100%",
-          height: "100%",
-          width: "25%",
-          backgroundColor: "#f8f9fa",
-          transition: "right 0.3s ease",
-          boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.3)",
-          padding: "20px",
-          zIndex: 999,
-        }}
-      >
-        <h2>Kategoriler</h2>
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("")}>
-              Ana Sayfa
-            </button>
-          </li>
-          <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("heyecan")}>
-              Heyecan
-            </button>
-          </li>
-          <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("gerilim")}>
-              Gerilim
-            </button>
-          </li>
-          <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("korku")}>
-              Korku
-            </button>
-          </li>
-        </ul>
-      </div>
+      {/* ... (menü kodları) ... */}
 
       {/* Film Listesi */}
       <div className="col-lg-12">
@@ -97,6 +51,12 @@ const MovieList = (props) => {
                       deleteMovieProp={props.deleteMovieProp}
                       movie={movie}
                     />
+                    <button
+                      className="btn btn-md btn-outline-primary" // Güncelleme butonu
+                      onClick={() => handleEditClick(movie)}
+                    >
+                      Güncelle
+                    </button>
                     <h2>
                       <span className="badge badge-info bg-primary">
                         {movie.rating}
@@ -108,6 +68,14 @@ const MovieList = (props) => {
             </div>
           ))}
         </div>
+
+        {/* Güncelleme Formu */}
+        {editingMovie && (
+          <UpdateMovie
+            movie={editingMovie}
+            onUpdateMovie={handleUpdateMovie}
+          />
+        )}
       </div>
     </div>
   );

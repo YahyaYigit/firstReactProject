@@ -31,6 +31,8 @@ const data = {
     ],
 };
 
+
+
 const styles = {
     rowTitleColor: "blue",
     rowTitleTextSize: "1.5rem",

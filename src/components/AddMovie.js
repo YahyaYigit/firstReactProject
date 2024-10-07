@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import serialize from "form-serialize";
 import ImageUpload from "./imgUpload";
 
 function AddMovie(props) {
   const navigate = useNavigate();
+  const [imageURL, setImageURL] = useState(""); // Resim URL'si için state
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const newMovie = serialize(e.target, { hash: true });
-    props.onAddMovie(newMovie);
+    // Resim URL'sini yeni filme ekle
+    props.onAddMovie({ ...newMovie, imageURL });
     navigate("/"); // Form gönderildikten sonra anasayfaya yönlendirme
   };
 
   const handleImageUpload = (image) => {
+    setImageURL(image); // Yüklenen resmin URL'sini state'e kaydet
     console.log("Yüklenen Resim:", image);
   };
 
@@ -42,18 +45,18 @@ function AddMovie(props) {
         <div className="form-row d-flex">
           <div className="form-group col-md-10">
             <label htmlFor="inputName">Name</label>
-            <input type="text" className="form-control" name="name" />
+            <input type="text" className="form-control" name="name" required />
           </div>
           <div className="form-group col-md-2 ps-3">
             <label htmlFor="inputRating">Rating</label>
-            <input type="text" className="form-control" name="rating" />
+            <input type="text" className="form-control" name="rating" required />
           </div>
         </div>
         
         {/* Kategori Seçimi */}
         <div className="form-group">
           <label htmlFor="inputCategory">Category</label>
-          <select className="form-control" name="category">
+          <select className="form-control" name="category" required>
             <option value="">Select Category</option>
             <option value="Heyecan">Heyecan</option>
             <option value="Gerilim">Gerilim</option>
@@ -70,6 +73,7 @@ function AddMovie(props) {
               className="form-control"
               name="overview"
               rows="5"
+              required
             ></textarea>
           </div>
         </div>

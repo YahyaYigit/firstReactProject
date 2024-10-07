@@ -43,12 +43,14 @@ function App() {
     setMovies((prevMovies) => [...prevMovies, movie]);
   };
 
-  let filteredMovies = movies.filter((movie) => {
-    return (
-      movie.name &&
-      movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
-    );
-  });
+  let filteredMovies = movies
+    .filter((movie) => {
+      return (
+        movie.name &&
+        movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+      );
+    })
+    .sort((a, b) => (a.id < b.id ? 1 : a.id > b.id ? -1 : 0)); // Sorting based on movie ID
 
   return (
     <div className="container">
@@ -69,26 +71,29 @@ function App() {
                   deleteMovieProp={deleteMovie}
                 />
                 <FaqCom />
-
                 <BackToTopButton />
               </React.Fragment>
             }
           />
           <Route
             path="/add"
-            element={
-              <AddMovie
-                onAddMovie={(movie) => {
-                  addMovie(movie);
-                  <useNavigate to="/" replace={true} />;
-                }}
-              />
-            }
+            element={<AddMovieWithNavigate onAddMovie={addMovie} />}
           />
         </Routes>
       </Router>
     </div>
   );
 }
+
+const AddMovieWithNavigate = ({ onAddMovie }) => {
+  const navigate = useNavigate();
+
+  const handleAddMovie = async (movie) => {
+    await onAddMovie(movie); // Yeni filmi ekle
+    navigate("/"); // Ana sayfaya yönlendir
+  };
+
+  return <AddMovie onAddMovie={handleAddMovie} />;
+};
 
 export default App;

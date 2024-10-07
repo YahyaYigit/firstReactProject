@@ -1,36 +1,91 @@
 import React, { useState } from "react";
 import DeleteModal from "./DeleteModal";
-import UpdateMovie from "./UpdateMovie"; // UpdateMovie bileşenini ekle
+import { Link } from 'react-router-dom';
 
 const MovieList = (props) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [editingMovie, setEditingMovie] = useState(null); // Güncelleme için seçilen film
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Menü durumu
+  const [selectedCategory, setSelectedCategory] = useState(null); // Seçilen kategori
+
+
+  const truncateOverview = (string, maxLength) =>{
+    if (!string) return null;
+    if (string.length <= maxLength) return string;
+    return `${string.substring(0, maxLength)} ...`
+  }
+
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen(!isMenuOpen); // Menü görünürlük durumunu değiştir
   };
 
+  // Kategoriye tıklandığında çağrılan fonksiyon
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category); // Seçilen kategoriyi güncelle
   };
 
-  const handleEditClick = (movie) => {
-    setEditingMovie(movie); // Güncellemek için seçilen filmi ayarla
-  };
-
-  const handleUpdateMovie = (updatedMovie) => {
-    props.updateMovieProp(updatedMovie); // Güncellenen filmi üst bileşene gönder
-    setEditingMovie(null); // Güncelleme formunu kapat
-  };
-
+  // Seçilen kategoriye göre film listesini filtrele
   const filteredMovies = selectedCategory
     ? props.movies.filter((movie) => movie.category === selectedCategory)
     : props.movies;
 
   return (
     <div className="row">
-      {/* ... (menü kodları) ... */}
+      <button
+        className="btn"
+        onClick={toggleMenu}
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "100px",
+          zIndex: 1000,
+          width: "50px",
+          height: "50px",
+          fontSize: "50px",
+        }}
+      >
+        &#9776; {/* Üç çizgili menü simgesi */}
+      </button>
+
+      {/* Sağdan Açılır Menü */}
+      <div
+        className={`side-menu ${isMenuOpen ? "open" : ""}`}
+        style={{
+          position: "fixed",
+          top: "0",
+          right: isMenuOpen ? "0" : "-100%",
+          height: "100%",
+          width: "25%",
+          backgroundColor: "#f8f9fa",
+          transition: "right 0.3s ease",
+          boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.3)",
+          padding: "20px",
+          zIndex: 999,
+        }}
+      >
+        <h2>Kategoriler</h2>
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          <li>
+            <button className="btn fs-3" onClick={() => handleCategoryClick("")}>
+              Ana Sayfa
+            </button>
+          </li>
+          <li>
+            <button className="btn fs-3" onClick={() => handleCategoryClick("heyecan")}>
+              Heyecan
+            </button>
+          </li>
+          <li>
+            <button className="btn fs-3" onClick={() => handleCategoryClick("gerilim")}>
+              Gerilim
+            </button>
+          </li>
+          <li>
+            <button className="btn fs-3" onClick={() => handleCategoryClick("korku")}>
+              Korku
+            </button>
+          </li>
+        </ul>
+      </div>
 
       {/* Film Listesi */}
       <div className="col-lg-12">
@@ -45,18 +100,18 @@ const MovieList = (props) => {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{movie.name}</h5>
-                  <p className="card-text">{movie.overview}</p>
+                  <p className="card-text">{truncateOverview(movie.overview, 200)}</p>
                   <div className="d-flex justify-content-between align-items-center">
                     <DeleteModal
                       deleteMovieProp={props.deleteMovieProp}
                       movie={movie}
                     />
-                    <button
-                      className="btn btn-md btn-outline-primary" // Güncelleme butonu
-                      onClick={() => handleEditClick(movie)}
-                    >
-                      Güncelle
-                    </button>
+
+                      <Link type="button"
+                      className="btn btn-md btn-outline-primary w-25"
+                      to={`edit/${movie.id}`}
+                      > Edit </Link>
+
                     <h2>
                       <span className="badge badge-info bg-primary">
                         {movie.rating}
@@ -68,14 +123,6 @@ const MovieList = (props) => {
             </div>
           ))}
         </div>
-
-        {/* Güncelleme Formu */}
-        {editingMovie && (
-          <UpdateMovie
-            movie={editingMovie}
-            onUpdateMovie={handleUpdateMovie}
-          />
-        )}
       </div>
     </div>
   );

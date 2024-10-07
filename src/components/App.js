@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import BackToTopButton from "./BackToTopButton";
 import FaqCom from "./FaqCom";
+import UpdateMovie from "./UpdateMovie";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -79,6 +80,10 @@ function App() {
             path="/add"
             element={<AddMovieWithNavigate onAddMovie={addMovie} />}
           />
+
+          <Route path="/edit/:id" Component={UpdateMovie} />
+
+         
         </Routes>
       </Router>
     </div>

@@ -3,6 +3,7 @@ import MovieList from "./MovieList";
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import AddMovie from "./AddMovie";
+import UpdateMovie from "./UpdateMovie";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,7 +12,6 @@ import {
 } from "react-router-dom";
 import BackToTopButton from "./BackToTopButton";
 import FaqCom from "./FaqCom";
-import UpdateMovie from "./UpdateMovie";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -20,8 +20,8 @@ function App() {
   useEffect(() => {
     const fetchMovies = async () => {
       const response = await axios.get("http://localhost:3002/movies");
-      console.log(response);
-      setMovies(response.data);
+      const sortedMovies = response.data.sort((a, b) => b.id - a.id); // Filmleri ters sıraya göre sıralıyoruz
+      setMovies(sortedMovies);
     };
 
     fetchMovies();
@@ -33,25 +33,32 @@ function App() {
     setMovies(newMovieList);
   };
 
-  const categories = ["heyecan", "gerilim", "korku"];
+  // Filmleri listeye güncelleme fonksiyonu
+  const updateMovieInList = (updatedMovie) => {
+    setMovies((prevMovies) => {
+      const updatedMovies = prevMovies.map((movie) =>
+        movie.id === updatedMovie.id ? updatedMovie : movie
+      );
+      return updatedMovies.sort((a, b) => b.id - a.id); // Güncellenmiş listeyi ters id'ye göre sıralıyoruz
+    });
+  };
+
+  const addMovie = async (movie) => {
+    await axios.post(`http://localhost:3002/movies/`, movie);
+    const newMovieList = [...movies, movie];
+    setMovies(newMovieList.sort((a, b) => b.id - a.id)); // Film eklendikten sonra listeyi ters id'ye göre tekrar sıralıyoruz
+  };
 
   const searchMovie = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const addMovie = async (movie) => {
-    await axios.post(`http://localhost:3002/movies/`, movie);
-    setMovies((prevMovies) => [...prevMovies, movie]);
-  };
-
-  let filteredMovies = movies
-    .filter((movie) => {
-      return (
-        movie.name &&
-        movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
-      );
-    })
-    .sort((a, b) => (a.id < b.id ? 1 : a.id > b.id ? -1 : 0)); // Sorting based on movie ID
+  let filteredMovies = movies.filter((movie) => {
+    return (
+      movie.name &&
+      movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+    );
+  });
 
   return (
     <div className="container">
@@ -68,8 +75,8 @@ function App() {
                 </div>
                 <MovieList
                   movies={filteredMovies}
-                  categories={categories} // Kategorileri geçir
                   deleteMovieProp={deleteMovie}
+                  updateMovieProp={updateMovieInList} // Güncellenen filmi listeye ekle
                 />
                 <FaqCom />
                 <BackToTopButton />
@@ -78,27 +85,18 @@ function App() {
           />
           <Route
             path="/add"
-            element={<AddMovieWithNavigate onAddMovie={addMovie} />}
+            element={<AddMovie onAddMovie={addMovie} />}
           />
-
-          <Route path="/edit/:id" Component={UpdateMovie} />
-
-         
+          <Route
+            path="/edit/:id"
+            element={
+              <UpdateMovie onUpdateMovie={updateMovieInList} /> // Güncellenen filmi bu fonksiyonla güncelle
+            }
+          />
         </Routes>
       </Router>
     </div>
   );
 }
-
-const AddMovieWithNavigate = ({ onAddMovie }) => {
-  const navigate = useNavigate();
-
-  const handleAddMovie = async (movie) => {
-    await onAddMovie(movie); // Yeni filmi ekle
-    navigate("/"); // Ana sayfaya yönlendir
-  };
-
-  return <AddMovie onAddMovie={handleAddMovie} />;
-};
 
 export default App;

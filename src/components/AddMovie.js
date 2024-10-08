@@ -24,6 +24,7 @@ function AddMovie(props) {
     navigate(-1); // Bir önceki sayfaya geri dön
   };
 
+  
   return (
     <div className="container">
       <button 
@@ -31,7 +32,7 @@ function AddMovie(props) {
         className="btn-close" 
         aria-label="Close" 
         onClick={handleGoBack}
-        style={{ position: 'absolute', top: '60px', left: '150px', fontSize:'30px'}} // Simgenin konumunu ayarlıyoruz
+        style={{ position: 'absolute', top: '60px', left: '50px', fontSize:'30px'}} // Simgenin konumunu ayarlıyoruz
       ></button>
 
       <form className="mt-5" onSubmit={handleFormSubmit}>

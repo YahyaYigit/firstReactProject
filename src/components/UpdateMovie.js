@@ -16,7 +16,6 @@ function UpdateMovie(props) {
   });
 
   useEffect(() => {
-    // Component yüklendiğinde filmi API'den çekiyoruz
     const fetchMovie = async () => {
       const response = await axios.get(`http://localhost:3002/movies/${id}`);
       setMovie(response.data); // Gelen film verisini state'e kaydediyoruz
@@ -29,14 +28,17 @@ function UpdateMovie(props) {
     e.preventDefault();
     const updatedMovie = serialize(e.target, { hash: true });
 
-    // Güncellenen filmi sunucuya gönderiyoruz
     try {
-      await axios.put(`http://localhost:3002/movies/${id}`, {
+      // API'ye güncellenmiş filmi gönderiyoruz
+      const response = await axios.put(`http://localhost:3002/movies/${id}`, {
         ...movie, // Mevcut film verilerini al
         ...updatedMovie, // Formdan gelen yeni verilerle güncelle
         imageURL: movie.imageURL, // Resim URL'sini koru
       });
-      
+
+      // Güncellenen filmi parent bileşene gönder
+      props.onUpdateMovie(response.data);
+
       // Başarılı olduğunda ana sayfaya yönlendir
       navigate("/");
     } catch (error) {
@@ -70,7 +72,7 @@ function UpdateMovie(props) {
         className="btn-close" 
         aria-label="Close" 
         onClick={handleGoBack}
-        style={{ position: 'absolute', top: '60px', left: '150px', fontSize:'30px'}}
+        style={{ position: 'absolute', top: '60px', left: '50px', fontSize:'30px'}}
       ></button>
 
       <form className="mt-5" onSubmit={handleFormSubmit}>
@@ -88,8 +90,8 @@ function UpdateMovie(props) {
               type="text"
               className="form-control"
               name="name"
-              value={movie.name} // Önceden doldurulmuş değer
-              onChange={handleChange} // Değer değişimini dinliyoruz
+              value={movie.name}
+              onChange={handleChange}
               required
             />
           </div>
@@ -99,20 +101,19 @@ function UpdateMovie(props) {
               type="text"
               className="form-control"
               name="rating"
-              value={movie.rating} // Önceden doldurulmuş değer
+              value={movie.rating}
               onChange={handleChange}
               required
             />
           </div>
         </div>
-        
-        {/* Kategori Seçimi */}
+
         <div className="form-group">
           <label htmlFor="inputCategory">Kategori</label>
           <select
             className="form-control"
             name="category"
-            value={movie.category != null ? movie.category : ""} // Önceden doldurulmuş kategori, yoksa boş
+            value={movie.category || ""}
             onChange={handleChange}
             required
           >
@@ -131,7 +132,7 @@ function UpdateMovie(props) {
             <textarea
               className="form-control"
               name="overview"
-              value={movie.overview} // Önceden doldurulmuş açıklama
+              value={movie.overview}
               onChange={handleChange}
               rows="5"
               required

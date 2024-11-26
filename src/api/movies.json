@@ -42,10 +42,66 @@
     },
     {
       "id": "7",
+      "name": "Teacup",
+      "rating": 8.4,
+      "overview": "Teacup, Georgia'nın kırsal kesimindeki bir çiftlikte mahsur kalan bir grup komşunun hikayesini anlatıyor. Bu komşular, birbirlerinden oldukça farklı geçmişlere ve yaşamlara sahip olsalar da gizemli ve ölümcül bir tehdit karşısında birleşmek zorunda kalırlar. Dizi, hayatta kalma mücadelesi, topluluk içi ilişkiler ve insanın doğaya karşı mücadelesini konu alarak izleyicilere gerilim dolu bir deneyim sunuyor.",
+      "imageURL": "/images/image-8.webp",
+      "category": "heyecan"
+    },
+    {
+      "id": "8",
       "name": "Maymunlar Cehennemi",
       "rating": 9.5,
       "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
       "imageURL": "/images/maymunlar.webp",
+      "category": "korku"
+    },
+    {
+      "id": "9",
+      "name": "Canavarlar: Lyle ve Erik Menendez'in Hikâyesi ",
+      "rating": 7.6,
+      "overview": "Gerçek suç temalı bu sürükleyici drama, 1989'da Beverly Hills'te ebeveynlerini vahşice katletmekten hüküm giyen Menendez kardeşlerin hayatını derinlemesine inceliyor.",
+      "imageURL": "/images/image-9.webp",
+      "category": "gerilim"
+    },
+    {
+      "id": "10",
+      "name": "Sweetpea",
+      "rating": 5.1,
+      "overview": "Rhiannon Lewis doesn't make much of an impression - people walk past her in the street without a second glance. That is until she is pushed over the edge and loses control. Rhiannon's life transforms, but can she keep her killer secret?",
+      "imageURL": "/images/image-10.webp",
+      "category": "heyecan"
+    },
+    {
+      "id": "11",
+      "name": "The Penguin",
+      "rating": 7.9,
+      "overview": "Oswald Chesterfield Cobblepot nam-ı diğer Penguen'in, Gotham Şehri'nin yeraltı suç dünyasındaki yükselişinin hikayesi.",
+      "imageURL": "/images/image-11.webp",
+      "category": "korku"
+    },
+    {
+      "id": "12",
+      "name": "Gülümse 2",
+      "rating": 7.0,
+      "overview": "Yeni bir dünya turuna çıkmak üzere olan küresel pop fenomeni Skye Riley (Naomi Scott), giderek daha korkunç ve açıklanamaz olaylar yaşamaya başlar. Artan dehşet ve şöhretin baskısından bunalan Skye, kontrolden çıkmadan önce hayatının kontrolünü yeniden kazanmak için karanlık geçmişiyle yüzleşmek zorunda kalır.",
+      "imageURL": "/images/image-12.webp",
+      "category": "heyecan"
+    },
+    {
+      "id": "13",
+      "name": "John Wick 4",
+      "rating": 7.7,
+      "overview": "This is a wider card with supporting text below as a natural lead-in to additional content.",
+      "imageURL": "/images/image-13.webp",
+      "category": "gerilim"
+    },
+    {
+      "id": "14",
+      "name": "The Blacklist",
+      "rating": 8.4,
+      "overview": "FBI'ın arananlar listesindeki kaçak, diğer kötüleri yakalamaları için FBI'a yardım teklifinde bulunur; tek şartı çaylak profil uzmanı Elizabeth Keen'in ortağı olmasıdır.",
+      "imageURL": "/images/image-14.webp",
       "category": "gerilim"
     }
     

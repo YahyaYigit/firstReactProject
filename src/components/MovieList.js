@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DeleteModal from "./DeleteModal";
 import { Link } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
@@ -7,7 +7,10 @@ const MovieList = (props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Menü durumu
   const [selectedCategory, setSelectedCategory] = useState(null); // Seçilen kategori
   const [activePage, setActivePage] = useState(1); // Aktif sayfa durumu
-  const moviesPerPage = 5; // Her sayfada gösterilecek film sayısı
+  const moviesPerPage = 6; // Her sayfada gösterilecek film sayısı
+
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const truncateOverview = (string, maxLength) => {
     if (!string) return null;
@@ -19,7 +22,6 @@ const MovieList = (props) => {
     setIsMenuOpen(!isMenuOpen); // Menü görünürlük durumunu değiştir
   };
 
-  // Kategoriye tıklandığında çağrılan fonksiyon
   const handleCategoryClick = (category) => {
     setSelectedCategory(category); // Seçilen kategoriyi güncelle
     setActivePage(1); // Kategori değiştiğinde sayfayı sıfırla
@@ -52,11 +54,26 @@ const MovieList = (props) => {
     );
   }
 
+  // Menü dışında tıklama ile menüyü kapatma
+  const closeMenu = (e) => {
+    if (menuRef.current && !menuRef.current.contains(e.target) && !buttonRef.current.contains(e.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", closeMenu);
+    return () => {
+      document.removeEventListener("click", closeMenu);
+    };
+  }, []);
+
   return (
     <div className="row">
       <button
         className="btn"
         onClick={toggleMenu}
+        ref={buttonRef}
         style={{
           position: "fixed",
           top: "20px",
@@ -71,12 +88,13 @@ const MovieList = (props) => {
         &#9776;
       </button>
 
-      {/* Sağdan Açılır Menü */}
       <div
         className={`side-menu ${isMenuOpen ? "open" : ""}`}
+        ref={menuRef}
         style={{
           position: "fixed",
           top: "0",
+          paddingTop: "45px",
           left: isMenuOpen ? "0" : "-100%",
           height: "100%",
           width: "20%",
@@ -85,6 +103,7 @@ const MovieList = (props) => {
           boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.3)",
           padding: "20px",
           zIndex: 999,
+          paddingLeft:"100px",
         }}
       >
         <h2>Kategoriler</h2>
@@ -157,7 +176,6 @@ const MovieList = (props) => {
         </div>
       </div>
 
-      {/* Sayfalamayı ortalama */}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         <Pagination>{paginationItems}</Pagination>
       </div>

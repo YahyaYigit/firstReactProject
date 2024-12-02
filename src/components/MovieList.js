@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
 
 const MovieList = (props) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Menü durumu
-  const [selectedCategory, setSelectedCategory] = useState(null); // Seçilen kategori
-  const [activePage, setActivePage] = useState(1); // Aktif sayfa durumu
-  const moviesPerPage = 6; // Her sayfada gösterilecek film sayısı
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [activePage, setActivePage] = useState(1);
+  const moviesPerPage = 6;
 
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -19,20 +19,35 @@ const MovieList = (props) => {
   };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); // Menü görünürlük durumunu değiştir
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category); // Seçilen kategoriyi güncelle
-    setActivePage(1); // Kategori değiştiğinde sayfayı sıfırla
+    setSelectedCategory(category);
+    setActivePage(1);
   };
 
-  // Seçilen kategoriye göre film listesini filtrele
-  const filteredMovies = selectedCategory
-    ? props.movies.filter((movie) => movie.category === selectedCategory)
-    : props.movies;
+  // Filtreleme işlemi (kategori ve arama)
+  const filteredMovies = props.movies.filter((movie) => {
+    const matchesCategory = selectedCategory
+      ? movie.category === selectedCategory
+      : true;
+    const matchesSearchQuery = props.searchQuery
+      ? movie.name?.toLowerCase().includes(props.searchQuery.toLowerCase())
+      : true;
 
-  // Sayfaya göre filmleri dilimleme
+    return matchesCategory && matchesSearchQuery;
+  });
+
+  // Aktif sayfa kontrolü (eğer sayfa aşılırsa 1'e dönme)
+  useEffect(() => {
+    const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
+    if (activePage > totalPages) {
+      setActivePage(1); // Aktif sayfa geçersizse birinci sayfaya dön
+    }
+  }, [filteredMovies.length, activePage]);
+
+  // Sayfa numaralarına göre film dilimleme
   const indexOfLastMovie = activePage * moviesPerPage;
   const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
   const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie);
@@ -40,7 +55,7 @@ const MovieList = (props) => {
   // Sayfa sayısını hesaplama
   const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
 
-  // Sayfa numaralarını oluşturma
+  // Sayfa numaraları oluşturma
   const paginationItems = [];
   for (let number = 1; number <= totalPages; number++) {
     paginationItems.push(
@@ -56,7 +71,11 @@ const MovieList = (props) => {
 
   // Menü dışında tıklama ile menüyü kapatma
   const closeMenu = (e) => {
-    if (menuRef.current && !menuRef.current.contains(e.target) && !buttonRef.current.contains(e.target)) {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(e.target) &&
+      !buttonRef.current.contains(e.target)
+    ) {
       setIsMenuOpen(false);
     }
   };
@@ -77,12 +96,12 @@ const MovieList = (props) => {
         style={{
           position: "fixed",
           top: "20px",
-          left: "20px",
+          left: "10px",
           zIndex: 1000,
           width: "80px",
           height: "50px",
           fontSize: "50px",
-          border: "none"
+          border: "none",
         }}
       >
         &#9776;
@@ -97,13 +116,13 @@ const MovieList = (props) => {
           paddingTop: "45px",
           left: isMenuOpen ? "0" : "-100%",
           height: "100%",
-          width: "20%",
+          width: "22%",
           backgroundColor: "#f8f9fa",
           transition: "left 0.3s ease",
           boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.3)",
           padding: "20px",
           zIndex: 999,
-          paddingLeft:"100px",
+          paddingLeft: "100px",
         }}
       >
         <h2>Kategoriler</h2>
@@ -114,24 +133,32 @@ const MovieList = (props) => {
             </button>
           </li>
           <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("heyecan")}>
+            <button
+              className="btn fs-3"
+              onClick={() => handleCategoryClick("heyecan")}
+            >
               Heyecan
             </button>
           </li>
           <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("gerilim")}>
+            <button
+              className="btn fs-3"
+              onClick={() => handleCategoryClick("gerilim")}
+            >
               Gerilim
             </button>
           </li>
           <li>
-            <button className="btn fs-3" onClick={() => handleCategoryClick("korku")}>
+            <button
+              className="btn fs-3"
+              onClick={() => handleCategoryClick("korku")}
+            >
               Korku
             </button>
           </li>
         </ul>
       </div>
 
-      {/* Film Listesi */}
       <div className="col-lg-12">
         <div className="row">
           {currentMovies.map((movie) => (
@@ -176,7 +203,7 @@ const MovieList = (props) => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
         <Pagination>{paginationItems}</Pagination>
       </div>
     </div>

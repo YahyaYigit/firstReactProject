@@ -3,24 +3,33 @@ import { useNavigate } from "react-router-dom";
 
 function SearchBar(props) {
   const navigate = useNavigate();
-  const handlFeFormSubmit = (event) => {
-    event.preventDefault();
+
+  const handleSearch = (event) => {
+    props.searchMovieProp(event); // Sadece arama sorgusunu güncelle
+    // props.resetPage(); // Aktif sayfayı sıfırlama satırını kaldırın
+  };
+
+  const handleAddMovieClick = () => {
     navigate("/add");
   };
 
   return (
-    <form onSubmit={handlFeFormSubmit}>
+    <form>
       <div className="form-row d-flex mb-3 mt-3">
         <div className="col-10">
           <input
-            onChange={props.searchMovieProp}
+            onChange={handleSearch}
             type="text"
             className="form-control"
-            placeholder="search a movie"
+            placeholder="Search for a movie"
           />
         </div>
         <div className="col-2 d-flex justify-content-end">
-          <button type="button" className="btn btn-md btn-danger" onClick={handlFeFormSubmit}>
+          <button
+            type="button"
+            className="btn btn-md btn-danger"
+            onClick={handleAddMovieClick}
+          >
             Add Movie
           </button>
         </div>
@@ -28,5 +37,6 @@ function SearchBar(props) {
     </form>
   );
 }
+
 
 export default SearchBar;

@@ -95,7 +95,7 @@ const MovieList = (props) => {
         ref={buttonRef}
         style={{
           position: "fixed",
-          top: "20px",
+          top: "-5px",
           left: "10px",
           zIndex: 1000,
           width: "80px",
@@ -172,7 +172,7 @@ const MovieList = (props) => {
                 <div className="card-body">
                   <h5 className="card-title">{movie.name}</h5>
                   <p className="card-text">
-                    {truncateOverview(movie.overview, 200)}
+                    {truncateOverview(movie.overview, 120)}
                   </p>
                   <div className="d-flex justify-content-between align-items-center">
                     <h2>

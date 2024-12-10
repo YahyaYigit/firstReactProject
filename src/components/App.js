@@ -18,11 +18,23 @@ function App() {
   const [activePage, setActivePage] = useState(1); // Aktif sayfa durumunu eklendi
 
   // Filmleri API'den çek
+  // useEffect(() => {
+  //   const fetchMovies = async () => {
+  //     const response = await axios.get("http://localhost:3002/movies");
+  //     const sortedMovies = response.data.sort((a, b) => b.id - a.id); // Filmleri ters sıraya göre sıralama
+  //     setMovies(sortedMovies);
+  //   };
+
+  //   fetchMovies();
+  // }, []);
+
   useEffect(() => {
     const fetchMovies = async () => {
-      const response = await axios.get("http://localhost:3002/movies");
-      const sortedMovies = response.data.sort((a, b) => b.id - a.id); // Filmleri ters sıraya göre sıralama
-      setMovies(sortedMovies);
+      const response = await axios.get("https://localhost:7070/api/Film");
+      if(response){
+        const sortedMovies =response?.data?.data.sort((a, b) => b.rating - a.rating); // Filmleri ters sıraya göre sıralama
+        setMovies(sortedMovies)
+      }
     };
 
     fetchMovies();
@@ -36,8 +48,8 @@ function App() {
 
   // Film silme
   const deleteMovie = async (movie) => {
-    await axios.delete(`http://localhost:3002/movies/${movie.id}`);
-    const newMovieList = movies.filter((m) => m.id !== movie.id);
+    await axios.delete(`https://localhost:7070/api/Film/DeleteFilm${movie.id}`);
+    const newMovieList = movies.filter((m) => m.rating !== movie.rating);
     setMovies(newMovieList);
   };
 
@@ -53,7 +65,7 @@ function App() {
 
   // Film ekleme
   const addMovie = async (movie) => {
-    await axios.post(`http://localhost:3002/movies/`, movie);
+    await axios.post(`https://localhost:7070/api/Film/CreateFilm`, movie);
     const newMovieList = [...movies, movie];
     setMovies(newMovieList.sort((a, b) => b.id - a.id)); // Film eklendikten sonra listeyi tekrar sıralama
   };

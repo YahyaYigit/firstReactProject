@@ -1,86 +1,124 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import serialize from "form-serialize";
-import ImageUpload from "./imgUpload";
+import axios from "axios";
 
 function AddMovie(props) {
   const navigate = useNavigate();
-  const [imageURL, setImageURL] = useState(""); // Resim URL'si için state
+  const [imageURL, setImageURL] = useState("");
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newMovie = serialize(e.target, { hash: true });
-    // Resim URL'sini yeni filme ekle
-    props.onAddMovie({ ...newMovie, imageURL });
-    navigate("/"); // Form gönderildikten sonra anasayfaya yönlendirme
+
+    if (!newMovie.name || !newMovie.rating || !newMovie.categoryId || !newMovie.imageUrl || !newMovie.overview) {
+      alert("Lütfen tüm alanları doldurduğunuzdan emin olun!");
+      return;
+    }
+
+    const movieData = { 
+      ...newMovie, 
+      imageUrl: imageURL, 
+    };
+
+    console.log("Gönderilecek Film Verisi:", movieData); 
+
+    try {
+      const response = await axios.post("https://localhost:7070/api/Film/CreateFilm", movieData);
+
+      const filmsResponse = await axios.get("https://localhost:7070/api/Film");
+
+      props.onAddMovie(filmsResponse.data);
+
+      navigate("/");
+
+    } catch (error) {
+      console.error("Film eklenirken hata oluştu:", error);
+      alert("Film eklenirken hata oluştu: " + (error.response?.data?.message || error.message));
+    }
   };
 
-  const handleImageUpload = (image) => {
-    setImageURL(image); // Yüklenen resmin URL'sini state'e kaydet
-    console.log("Yüklenen Resim:", image);
+  const handleImageURLChange = (e) => {
+    setImageURL(e.target.value); 
   };
 
   const handleGoBack = () => {
-    navigate(-1); // Bir önceki sayfaya geri dön
+    navigate(-1);
   };
 
-  
   return (
     <div className="container">
-      <button 
-        type="button" 
-        className="btn-close" 
-        aria-label="Close" 
+      <button
+        type="button"
+        className="btn-close"
+        aria-label="Close"
         onClick={handleGoBack}
-        style={{ position: 'absolute', top: '60px', left: '50px', fontSize:'30px'}} // Simgenin konumunu ayarlıyoruz
+        style={{
+          position: "absolute",
+          top: "83px", 
+          right: "33px",
+          fontSize: "30px",
+        }}
       ></button>
 
       <form className="mt-5" onSubmit={handleFormSubmit}>
         <input
-          className="form-control"
+          className="form-control mb-3"
           id="disabledInput"
           type="text"
           placeholder="Fill The Form To Add A Movie.."
           disabled
         />
-        <div className="form-row d-flex">
-          <div className="form-group col-md-10">
+        <div className="form-row d-flex mb-3">
+          <div className="form-group col-md-8 pe-md-2">
             <label htmlFor="inputName">Name</label>
             <input type="text" className="form-control" name="name" required />
           </div>
-          <div className="form-group col-md-2 ps-3">
+          <div className="form-group col-md-4 ps-md-4">
             <label htmlFor="inputRating">Rating</label>
             <input type="text" className="form-control" name="rating" required />
           </div>
         </div>
-        
-        {/* Kategori Seçimi */}
-        <div className="form-group">
+
+        <div className="form-group mb-3">
           <label htmlFor="inputCategory">Category</label>
-          <select className="form-control" name="category" required>
+          <select className="form-control" name="categoryId" required>
             <option value="">Select Category</option>
-            <option value="Heyecan">Heyecan</option>
-            <option value="Gerilim">Gerilim</option>
-            <option value="Korku">Korku</option>
+            <option value="1">Savaş</option>
+            <option value="2">Aksiyon</option>
+            <option value="3">Korku</option>
+            <option value="4">Gerilim</option>
+            <option value="5">Komedi</option>
+            <option value="6">Çizgi Film</option>
           </select>
         </div>
 
-        <ImageUpload onImageUpload={handleImageUpload} />
-        
-        <div className="form-row">
-          <div className="form-group col-md-12">
-            <label htmlFor="overviewTextarea">Overview</label>
-            <textarea
-              className="form-control"
-              name="overview"
-              rows="5"
-              required
-            ></textarea>
-          </div>
+        <div className="form-group mb-3">
+          <label htmlFor="inputImageUrl">Image URL</label>
+          <input
+            type="text"
+            className="form-control"
+            name="imageUrl"
+            value={imageURL}
+            onChange={handleImageURLChange}
+            placeholder="Enter the image URL"
+            required
+          />
         </div>
+
+        <div className="form-group mb-3">
+          <label htmlFor="overviewTextarea">Overview</label>
+          <textarea
+            className="form-control"
+            name="overview"
+            rows="5"
+            required
+          ></textarea>
+        </div>
+
         <input
           type="submit"
-          className="btn btn-danger btn-block w-100 mt-4"
+          className="btn btn-success btn-block w-100 mt-4"
           value="Add Movie"
         />
       </form>

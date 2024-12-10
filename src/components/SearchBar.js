@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./SideBar.css";
 
 function SearchBar(props) {
   const navigate = useNavigate();
 
   const handleSearch = (event) => {
-    props.searchMovieProp(event); // Sadece arama sorgusunu güncelle
-    // props.resetPage(); // Aktif sayfayı sıfırlama satırını kaldırın
+    props.searchMovieProp(event);
   };
 
   const handleAddMovieClick = () => {
@@ -24,10 +24,10 @@ function SearchBar(props) {
             placeholder="Search for a movie"
           />
         </div>
-        <div className="col-2 d-flex justify-content-end">
+        <div className="col-2 d-flex justify-content-end align-items-center">
           <button
             type="button"
-            className="btn btn-md btn-danger"
+            className="addbtn btn btn-md badge badge-info bg-primary"
             onClick={handleAddMovieClick}
           >
             Add Movie
@@ -37,6 +37,5 @@ function SearchBar(props) {
     </form>
   );
 }
-
 
 export default SearchBar;

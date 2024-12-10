@@ -3,35 +3,35 @@ import Faq from "react-faq-component";
 import "./FaqCom.css"; 
 
 const data = {
-    title: "FAQ", 
+    title: "Sıkça Sorulan Sorular", 
     rows: [
         {
-            title: "Lorem ipsum dolor sit amet,",
-            content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed tempor sem. Aenean vel turpis feugiat,
-              ultricies metus at, consequat velit. Curabitur est nibh, varius in tellus nec, mattis pulvinar metus.
-              In maximus cursus lorem, nec laoreet velit eleifend vel. Ut aliquet mauris tortor, sed egestas libero interdum vitae.
-              Fusce sed commodo purus, at tempus turpis.`,
+            title: "Filmlere nasıl göz atabilirim?",
+            content: `Filmleri ana sayfada kategoriye göre sıralayabilir ya da arama fonksiyonunu kullanarak istediğiniz filme ulaşabilirsiniz. Kategoriler arasında aksiyon, drama, komedi gibi seçenekler bulunmaktadır.`,
         },
         {
-            title: "Nunc maximus, magna at ultricies elementum",
+            title: "Filmleri nasıl eklerim?",
             content:
-                "Nunc maximus, magna at ultricies elementum, risus turpis vulputate quam, vitae convallis ex tortor sed dolor.",
+                "Yeni bir film eklemek için, hesabınıza giriş yaptıktan sonra 'Film Ekle' butonuna tıklayın. Film adı, açıklaması, kategorisi ve görseli gibi bilgileri girerek filme kolayca ekleme yapabilirsiniz.",
         },
         {
-            title: "Curabitur laoreet, mauris vel blandit fringilla",
-            content: `Curabitur laoreet, mauris vel blandit fringilla, leo elit rhoncus nunc, ac sagittis leo elit vel lorem.
-            Fusce tempor lacus ut libero posuere viverra. Nunc velit dolor, tincidunt at varius vel, laoreet vel quam.
-            Sed dolor urna, lobortis in arcu auctor, tincidunt mattis ante. Vivamus venenatis ultricies nibh in volutpat.
-            Cras eu metus quis leo vestibulum feugiat nec sagittis lacus.Mauris vulputate arcu sed massa euismod dignissim. `,
+            title: "Bir film hakkında daha fazla bilgiye nasıl ulaşırım?",
+            content: `Her bir filmin detay sayfasına giderek, o film hakkında daha fazla bilgiye ulaşabilirsiniz. Film açıklamaları, oyuncu kadrosu, yönetmen bilgisi ve kullanıcı yorumlarını burada bulabilirsiniz.`,
         },
         {
-            title: "What is the package version",
-            content: <p>current version is 1.2.1</p>,
+            title: "Film puanları nasıl hesaplanıyor?",
+            content: `Film puanları, kullanıcıların verdiği oylar ile hesaplanmaktadır. Her kullanıcı film izledikten sonra, puanlama yapabilir ve bu puanlar toplamda filmin genel puanını oluşturur.`,
+        },
+        {
+            title: "Hesap oluşturmak zorunlu mu?",
+            content: <p>Hayır, hesap oluşturmak zorunlu değildir. Ancak, film izleme geçmişinizi kaydetmek ve favorilerinizi takip edebilmek için bir hesap oluşturmanızı öneririz.</p>,
+        },
+        {
+            title: "Filmleri nasıl yorumlayabilirim?",
+            content: `Filmlerin alt kısmında yer alan yorum alanına düşüncelerinizi yazabilirsiniz. Yorumlarınızı paylaşarak diğer kullanıcılar ile film hakkında sohbet edebilirsiniz.`,
         },
     ],
 };
-
-
 
 const styles = {
     rowTitleColor: "blue",

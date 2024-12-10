@@ -9,10 +9,10 @@ const ImageUpload = ({ onImageUpload }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result); // Yüklenen resmin verisini state'e kaydet
-        onImageUpload(reader.result); // Yüklenen resmi üst bileşene gönder
+        setImage(reader.result); 
+        onImageUpload(reader.result);
       };
-      reader.readAsDataURL(file); // Resmi base64 formatında oku
+      reader.readAsDataURL(file); 
     }
   };
 
@@ -28,7 +28,7 @@ const ImageUpload = ({ onImageUpload }) => {
         <input
           type="file"
           onChange={handleImageChange}
-          style={{ display: 'none' }} // Varsayılan dosya girişi gizli
+          style={{ display: 'none' }} 
         />
       </label>
       {image && (

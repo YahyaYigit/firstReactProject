@@ -1,121 +1,228 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieList from "./MovieList";
 import SearchBar from "./SearchBar";
-import axios from "axios";
 import AddMovie from "./AddMovie";
 import UpdateMovie from "./UpdateMovie";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
 import BackToTopButton from "./BackToTopButton";
 import FaqCom from "./FaqCom";
+import Footer from "./Footer";
+import NavBar from "./Navbar";
+import About from "./About";
+import Contact from "./Contact";
+import "./SideBar.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activePage, setActivePage] = useState(1); // Aktif sayfa durumunu eklendi
-
-  // Filmleri API'den çek
-  // useEffect(() => {
-  //   const fetchMovies = async () => {
-  //     const response = await axios.get("http://localhost:3002/movies");
-  //     const sortedMovies = response.data.sort((a, b) => b.id - a.id); // Filmleri ters sıraya göre sıralama
-  //     setMovies(sortedMovies);
-  //   };
-
-  //   fetchMovies();
-  // }, []);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
       const response = await axios.get("https://localhost:7070/api/Film");
-      if(response){
-        const sortedMovies =response?.data?.data.sort((a, b) => b.rating - a.rating); // Filmleri ters sıraya göre sıralama
-        setMovies(sortedMovies)
+      if (response) {
+        const sortedMovies = response?.data?.data.sort(
+          (a, b) => b.rating - a.rating
+        );
+        setMovies(sortedMovies);
+        setFilteredMovies(sortedMovies);
+      }
+    };
+    fetchMovies();
+
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false);
       }
     };
 
-    fetchMovies();
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  // Arama sorgusu güncelleniyor
   const searchMovie = (event) => {
     setSearchQuery(event.target.value);
-    setActivePage(1); // Arama yapıldığında aktif sayfayı 1 olarak sıfırlama
+    filterMovies(event.target.value, selectedCategory);
   };
 
-  // Film silme
+  const filterMovies = (searchQuery, categoryId) => {
+    const filtered = movies.filter((movie) => {
+      const matchesCategory = categoryId
+        ? movie.categoryId.toString() === categoryId
+        : true;
+      const matchesSearch = movie.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+    setFilteredMovies(filtered);
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategory(categoryId);
+    filterMovies(searchQuery, categoryId);
+  };
+
   const deleteMovie = async (movie) => {
-    await axios.delete(`https://localhost:7070/api/Film/DeleteFilm${movie.id}`);
-    const newMovieList = movies.filter((m) => m.rating !== movie.rating);
-    setMovies(newMovieList);
+    try {
+      await axios.delete(
+        `https://localhost:7070/api/Film/DeleteFilm/${movie.id}`
+      );
+      const newMovieList = movies.filter((m) => m.id !== movie.id);
+      setMovies(newMovieList);
+      setFilteredMovies(newMovieList);
+      console.log("Film başarıyla silindi!");
+    } catch (error) {
+      console.error("Silme işlemi sırasında hata:", error);
+    }
   };
 
-  // Film güncelleme
   const updateMovieInList = (updatedMovie) => {
     setMovies((prevMovies) => {
       const updatedMovies = prevMovies.map((movie) =>
         movie.id === updatedMovie.id ? updatedMovie : movie
       );
-      return updatedMovies.sort((a, b) => b.id - a.id); // Güncellenmiş listeyi ters id'ye göre sıralama
+      return updatedMovies.sort((a, b) => b.rating - a.rating);
+    });
+    setFilteredMovies((prevFilteredMovies) => {
+      const updatedMovies = prevFilteredMovies.map((movie) =>
+        movie.id === updatedMovie.id ? updatedMovie : movie
+      );
+      return updatedMovies.sort((a, b) => b.rating - a.rating);
     });
   };
 
-  // Film ekleme
   const addMovie = async (movie) => {
-    await axios.post(`https://localhost:7070/api/Film/CreateFilm`, movie);
     const newMovieList = [...movies, movie];
-    setMovies(newMovieList.sort((a, b) => b.id - a.id)); // Film eklendikten sonra listeyi tekrar sıralama
+    setMovies(newMovieList.sort((a, b) => b.rating - a.rating));
+    setFilteredMovies(newMovieList.sort((a, b) => b.rating - a.rating));
   };
 
-  // Arama sorgusuna göre filmleri filtrele
-  const filteredMovies = movies.filter((movie) => {
-    return (
-      movie.name &&
-      movie.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
-    );
-  });
+  const toggleMenu = () => {
+    setIsMenuOpen((prevState) => !prevState);
+  };
 
   return (
-    <div className="container">
+    <div className="App">
       <Router>
-        {/* Tüm sayfalarda arama çubuğunu göster */}
-        <SearchBar searchMovieProp={searchMovie} resetPage={() => setActivePage(1)} />
+        <NavBar toggleMenu={toggleMenu} />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <React.Fragment>
-                {filteredMovies.length === 0 ? (
-                  <div className="alert alert-warning" role="alert">
-                    Film bulunamadı.
-                  </div>
-                ) : (
-                  <MovieList
-                    movies={filteredMovies} // Filtrelenmiş filmleri gönder
-                    deleteMovieProp={deleteMovie}  
-                    updateMovieProp={updateMovieInList} 
-                  />
-                )}
-                <FaqCom />
-                <BackToTopButton />
-              </React.Fragment>
-            }
-          />
-          <Route
-            path="/add"
-            element={<AddMovie onAddMovie={addMovie} />} 
-          />
-          <Route
-            path="/edit/:id"
-            element={
-              <UpdateMovie onUpdateMovie={updateMovieInList} /> 
-            }
-          />
-        </Routes>
+        <button
+          ref={buttonRef}
+          onClick={toggleMenu}
+          className={`hamburger-btn ${isMenuOpen ? "open" : ""}`}
+        >
+          ☰
+        </button>
+
+        <div ref={menuRef} className={`side-menu ${isMenuOpen ? "open" : ""}`}>
+          <h2>Kategoriler</h2>
+          <ul>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("")}
+              >
+                Ana Sayfa
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("1")}
+              >
+                Savaş
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("2")}
+              >
+                Aksiyon
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("3")}
+              >
+                Korku
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("4")}
+              >
+                Gerilim
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("5")}
+              >
+                Komedi
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn fs-3"
+                onClick={() => handleCategoryClick("6")}
+              >
+                Çizgi Film
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div className="container" style={{ marginTop: "20px" }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <SearchBar searchMovieProp={searchMovie} />
+                  {filteredMovies.length === 0 ? (
+                    <div className="alert alert-warning" role="alert">
+                      Film bulunamadı.
+                    </div>
+                  ) : (
+                    <MovieList
+                      movies={filteredMovies}
+                      deleteMovieProp={deleteMovie}
+                      updateMovieProp={updateMovieInList}
+                    />
+                  )}
+                  <FaqCom />
+                  <BackToTopButton />
+                </>
+              }
+            />
+            <Route path="/add" element={<AddMovie onAddMovie={addMovie} />} />
+            <Route
+              path="/edit/:id"
+              element={<UpdateMovie onUpdateMovie={updateMovieInList} />}
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </div>
+
+        <Footer />
       </Router>
     </div>
   );

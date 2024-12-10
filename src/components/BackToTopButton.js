@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { IoIosArrowUp } from 'react-icons/io'; // react-icons'dan ok simgesi
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './SideBar.css';
 
 const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleScroll = () => {
-    if (window.scrollY > 300) { // 300px aşağı kaydırıldığında butonu göster
+    if (window.scrollY > 300) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -15,7 +17,7 @@ const BackToTopButton = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' // Yumuşak kaydırma efekti
+      behavior: 'smooth',
     });
   };
 
@@ -28,22 +30,13 @@ const BackToTopButton = () => {
 
   return (
     <button
-      className={`btn btn-danger back-to-top ${isVisible ? 'visible' : 'hidden'}`}
+      className={`backbtn ${isVisible ? 'visible' : 'hidden'}`}
       onClick={scrollToTop}
       style={{
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        width: '50px', // Butonun genişliği
-        height: '50px', // Butonun yüksekliği
-        borderRadius: '50%', // Yuvarlak hale getirme
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: isVisible ? 'block' : 'none', // Butonu yalnızca görünür olduğunda göster
+        display: isVisible ? 'block' : 'none',
       }}
     >
-      {/* Burada metni kaldırdık */}
-      <i className="bi bi-arrow-up"></i> {/* Yukarı ok simgesi */}
+      <IoIosArrowUp size={30} /> {/* react-icons'dan ok simgesi */}
     </button>
   );
 };

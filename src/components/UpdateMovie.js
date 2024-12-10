@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import serialize from "form-serialize";
-import ImageUpload from "./imgUpload";
 import axios from "axios";
 
 function UpdateMovie(props) {
   const navigate = useNavigate();
-  const { id } = useParams(); // URL'den id'yi alıyoruz
+  const { id } = useParams();
   const [movie, setMovie] = useState({
     name: "",
     rating: "",
-    category: "",
+    categoryId: "",
     overview: "",
-    imageURL: "",
+    imageUrl: "",
   });
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchMovie = async () => {
-      const response = await axios.get(`http://localhost:3002/movies/${id}`);
-      setMovie(response.data); // Gelen film verisini state'e kaydediyoruz
+      try {
+        const response = await axios.get(
+          `https://localhost:7070/api/Film/GetFilm/${id}`
+        );
+        setMovie(response.data);
+      } catch (error) {
+        console.error("Film verisi alınırken hata oluştu:", error);
+      }
     };
 
     fetchMovie();
@@ -28,33 +34,34 @@ function UpdateMovie(props) {
     e.preventDefault();
     const updatedMovie = serialize(e.target, { hash: true });
 
+    if (!updatedMovie.overview || updatedMovie.overview.length < 1) {
+      alert("Açıklama kısmı boş olamaz!");
+      return;
+    }
+
     try {
-      // API'ye güncellenmiş filmi gönderiyoruz
-      const response = await axios.put(`http://localhost:3002/movies/${id}`, {
-        ...movie, // Mevcut film verilerini al
-        ...updatedMovie, // Formdan gelen yeni verilerle güncelle
-        imageURL: movie.imageURL, // Resim URL'sini koru
-      });
+      const response = await axios.put(
+        `https://localhost:7070/api/Film/UpdateFilm/${id}`,
+        {
+          ...movie,
+          ...updatedMovie,
+        }
+      );
 
-      // Güncellenen filmi parent bileşene gönder
       props.onUpdateMovie(response.data);
+      setSuccessMessage("Film başarılı bir şekilde güncellendi.");
 
-      // Başarılı olduğunda ana sayfaya yönlendir
-      navigate("/");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/");
+      }, 1000);
     } catch (error) {
-      console.error("Film güncelleme hatası:", error);
+      console.error("Film güncellenirken hata oluştu:", error);
     }
   };
 
-  const handleImageUpload = (image) => {
-    setMovie((prevMovie) => ({
-      ...prevMovie,
-      imageURL: image,
-    }));
-  };
-
   const handleGoBack = () => {
-    navigate(-1); // Bir önceki sayfaya geri dön
+    navigate(-1);
   };
 
   const handleChange = (e) => {
@@ -67,72 +74,96 @@ function UpdateMovie(props) {
 
   return (
     <div className="container">
-      <button 
-        type="button" 
-        className="btn-close" 
-        aria-label="Close" 
+      <button
+        type="button"
+        className="btn-close"
+        aria-label="Close"
         onClick={handleGoBack}
-        style={{ position: 'absolute', top: '60px', left: '50px', fontSize:'30px'}}
+        style={{
+          position: "absolute",
+          top: "83px",
+          right: "33px",
+          fontSize: "30px",
+        }}
       ></button>
 
       <form className="mt-5" onSubmit={handleFormSubmit}>
+        {successMessage && (
+          <div className="alert alert-success text-center">
+            {successMessage}
+          </div>
+        )}
+
         <input
-          className="form-control"
+          className="form-control mb-3"
           id="disabledInput"
           type="text"
-          placeholder="Edit The Form To Update A Movie.."
+          placeholder="Filmi güncellemek için formu düzenleyin.."
           disabled
         />
-        <div className="form-row d-flex">
-          <div className="form-group col-md-10">
+        <div className="form-row d-flex mb-3">
+          <div className="form-group col-md-8 pe-md-2">
             <label htmlFor="inputName">İsim</label>
             <input
               type="text"
               className="form-control"
               name="name"
-              value={movie.name}
+              value={movie.name || ""}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="form-group col-md-2 ps-3">
+          <div className="form-group col-md-4 ps-md-4 pe-md-0">
             <label htmlFor="inputRating">Rating</label>
             <input
               type="text"
               className="form-control"
               name="rating"
-              value={movie.rating}
+              value={movie.rating || ""}
               onChange={handleChange}
               required
             />
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="form-group mb-3">
           <label htmlFor="inputCategory">Kategori</label>
           <select
             className="form-control"
-            name="category"
-            value={movie.category || ""}
+            name="categoryId"
+            value={movie.categoryId || ""}
             onChange={handleChange}
             required
           >
             <option value="">Kategori Seçin</option>
-            <option value="Heyecan">Heyecan</option>
-            <option value="Gerilim">Gerilim</option>
-            <option value="Korku">Korku</option>
+            <option value="1">Savaş</option>
+            <option value="2">Aksiyon</option>
+            <option value="3">Korku</option>
+            <option value="4">Gerilim</option>
+            <option value="5">Komedi</option>
+            <option value="6">Çizgi Film</option>
           </select>
         </div>
 
-        <ImageUpload onImageUpload={handleImageUpload} />
+        <div className="form-group mb-3">
+          <label htmlFor="inputImageURL">Resim URL</label>
+          <input
+            type="text"
+            className="form-control"
+            name="imageUrl"
+            value={movie.imageUrl || ""}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <div className="form-row">
+        <div className="form-row mb-3">
           <div className="form-group col-md-12">
             <label htmlFor="overviewTextarea">Açıklama</label>
             <textarea
               className="form-control"
               name="overview"
-              value={movie.overview}
+              value={movie.overview || ""}
               onChange={handleChange}
               rows="5"
               required

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import DeleteModal from "./DeleteModal";
 import { Link } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
@@ -7,10 +7,7 @@ const MovieList = (props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [activePage, setActivePage] = useState(1);
-  const moviesPerPage = 6;
-
-  const menuRef = useRef(null);
-  const buttonRef = useRef(null);
+  const moviesPerPage = 9;
 
   // Overview kısaltma fonksiyonu
   const truncateOverview = (string, maxLength) => {
@@ -18,11 +15,9 @@ const MovieList = (props) => {
     return string.length <= maxLength ? string : `${string.substring(0, maxLength)} ...`;
   };
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
   const handleCategoryClick = (categoryId) => {
     setSelectedCategory(categoryId);
-    setActivePage(1); // Sayfa numarasını sıfırlama
+    setActivePage(1); 
   };
 
   const filteredMovies = props.movies.filter((movie) => {
@@ -58,22 +53,10 @@ const MovieList = (props) => {
     );
   }
 
-  const closeMenu = (e) => {
-    if (
-      menuRef.current &&
-      !menuRef.current.contains(e.target) &&
-      !buttonRef.current.contains(e.target)
-    ) {
-      setIsMenuOpen(false);
-    }
+  // Sepete ekleme fonksiyonu
+  const handleAddToCart = (movie) => {
+    props.addToCart(movie); 
   };
-
-  useEffect(() => {
-    document.addEventListener("click", closeMenu);
-    return () => {
-      document.removeEventListener("click", closeMenu);
-    };
-  }, []);
 
   return (
     <div className="row">
@@ -99,7 +82,7 @@ const MovieList = (props) => {
                         className="btn btn-md btn-outline-primary"
                         to={`edit/${movie.id}`}
                       >
-                        Edit
+                        Düzenle
                       </Link>
 
                       <DeleteModal
@@ -113,6 +96,35 @@ const MovieList = (props) => {
                         {movie.rating}
                       </span>
                     </h2>
+                  </div>
+
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <div className="d-flex align-items-center gap-3">
+                      <h4>${movie.price || 10}</h4>
+                    </div>
+
+                    <div className="d-flex justify-content-end w-100">
+                      <button
+                        className="btn btn-md"
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "2px solid #28a745", 
+                          color: "#28a745", 
+                          transition: "all 0.3s ease", 
+                        }}
+                        onClick={() => handleAddToCart(movie)}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#28a745"; // Üzerine gelince yeşil
+                          e.target.style.color = "#fff"; 
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "transparent"; 
+                          e.target.style.color = "#28a745"; 
+                        }}
+                      >
+                        Sepete Ekle
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

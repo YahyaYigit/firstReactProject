@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import NavBar from "./Navbar";
 import About from "./About";
 import Contact from "./Contact";
+import CartPage from "./CartPage"; // Sepet Sayfası
 import "./SideBar.css";
 
 function App() {
@@ -119,7 +120,12 @@ function App() {
       <Router>
         <NavBar toggleMenu={toggleMenu} />
 
-        <button
+        <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <button
           ref={buttonRef}
           onClick={toggleMenu}
           className={`hamburger-btn ${isMenuOpen ? "open" : ""}`}
@@ -128,11 +134,11 @@ function App() {
         </button>
 
         <div ref={menuRef} className={`side-menu ${isMenuOpen ? "open" : ""}`}>
-          <h2>Kategoriler</h2>
+          <h3>Kategoriler</h3>
           <ul>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("")}
               >
                 Ana Sayfa
@@ -140,7 +146,7 @@ function App() {
             </li>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("1")}
               >
                 Savaş
@@ -148,7 +154,7 @@ function App() {
             </li>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("2")}
               >
                 Aksiyon
@@ -156,7 +162,7 @@ function App() {
             </li>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("3")}
               >
                 Korku
@@ -164,7 +170,7 @@ function App() {
             </li>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("4")}
               >
                 Gerilim
@@ -172,7 +178,7 @@ function App() {
             </li>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("5")}
               >
                 Komedi
@@ -180,7 +186,7 @@ function App() {
             </li>
             <li>
               <button
-                className="btn fs-3"
+                className="btn fs-4"
                 onClick={() => handleCategoryClick("6")}
               >
                 Çizgi Film
@@ -188,6 +194,13 @@ function App() {
             </li>
           </ul>
         </div>
+                </>
+              }
+            />
+          
+          </Routes>
+
+        
 
         <div className="container" style={{ marginTop: "20px" }}>
           <Routes>
@@ -219,6 +232,7 @@ function App() {
             />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/cart" element={<CartPage />} /> 
           </Routes>
         </div>
 

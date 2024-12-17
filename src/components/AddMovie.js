@@ -11,24 +11,26 @@ function AddMovie(props) {
     e.preventDefault();
     const newMovie = serialize(e.target, { hash: true });
 
-    if (!newMovie.name || !newMovie.rating || !newMovie.categoryId || !newMovie.imageUrl || !newMovie.overview) {
+    if (!newMovie.name || !newMovie.rating || !newMovie.categoryId || !newMovie.imageUrl || !newMovie.overview || !newMovie.price) {
       alert("Lütfen tüm alanları doldurduğunuzdan emin olun!");
       return;
     }
 
     const movieData = { 
       ...newMovie, 
-      imageUrl: imageURL, 
+      imageUrl: imageURL,
+      price: parseFloat(newMovie.price), 
     };
 
     console.log("Gönderilecek Film Verisi:", movieData); 
 
     try {
+      console.log("geldasdasdasi",movieData)
       const response = await axios.post("https://localhost:7070/api/Film/CreateFilm", movieData);
 
       const filmsResponse = await axios.get("https://localhost:7070/api/Film");
 
-      props.onAddMovie(filmsResponse.data);
+      //props.onAddMovie(filmsResponse.data);
 
       navigate("/");
 
@@ -72,11 +74,11 @@ function AddMovie(props) {
         <div className="form-row d-flex mb-3">
           <div className="form-group col-md-8 pe-md-2">
             <label htmlFor="inputName">Name</label>
-            <input type="text" className="form-control" name="name" required />
+            <input type="text" className="form-control" name="name"  placeholder="Enter the movie name" required />
           </div>
           <div className="form-group col-md-4 ps-md-4">
             <label htmlFor="inputRating">Rating</label>
-            <input type="text" className="form-control" name="rating" required />
+            <input type="number" className="form-control"  placeholder="Enter the movie rating" name="rating" required />
           </div>
         </div>
 
@@ -112,8 +114,21 @@ function AddMovie(props) {
             className="form-control"
             name="overview"
             rows="5"
+             placeholder="Enter the movie overview"
             required
           ></textarea>
+        </div>
+
+        <div className="form-group mb-3">
+          <label htmlFor="inputPrice">Price</label>
+          <input
+            type="number"
+            className="form-control"
+            name="price"
+            step="0.01"
+            placeholder="Enter the movie price"
+            required
+          />
         </div>
 
         <input

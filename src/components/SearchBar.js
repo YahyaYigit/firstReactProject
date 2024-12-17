@@ -21,7 +21,7 @@ function SearchBar(props) {
             onChange={handleSearch}
             type="text"
             className="form-control"
-            placeholder="Search for a movie"
+            placeholder="Bir Film Ara"
           />
         </div>
         <div className="col-2 d-flex justify-content-end align-items-center">
@@ -30,7 +30,7 @@ function SearchBar(props) {
             className="addbtn btn btn-md badge badge-info bg-primary"
             onClick={handleAddMovieClick}
           >
-            Add Movie
+            Film Ekle
           </button>
         </div>
       </div>

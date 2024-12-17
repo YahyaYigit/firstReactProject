@@ -24,7 +24,7 @@ const DeleteModal = (props) => {
         className="btn btn-md btn-outline-danger"
         data-bs-target="#exampleModal"
       >
-        Delete
+        Filmi Sil
       </button>
 
       <Modal show={show} onHide={handleClose}>

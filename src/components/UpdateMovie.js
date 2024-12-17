@@ -12,6 +12,7 @@ function UpdateMovie(props) {
     categoryId: "",
     overview: "",
     imageUrl: "",
+    price: "", // Yeni fiyat alanı
   });
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -152,6 +153,18 @@ function UpdateMovie(props) {
             className="form-control"
             name="imageUrl"
             value={movie.imageUrl || ""}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group mb-3">
+          <label htmlFor="inputPrice">Fiyat</label>
+          <input
+            type="number"
+            className="form-control"
+            name="price"
+            value={movie.price || ""}
             onChange={handleChange}
             required
           />

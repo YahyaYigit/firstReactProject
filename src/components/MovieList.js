@@ -9,7 +9,6 @@ const MovieList = (props) => {
   const [activePage, setActivePage] = useState(1);
   const moviesPerPage = 9;
 
-  // Overview kısaltma fonksiyonu
   const truncateOverview = (string, maxLength) => {
     if (!string) return null;
     return string.length <= maxLength ? string : `${string.substring(0, maxLength)} ...`;
@@ -53,7 +52,6 @@ const MovieList = (props) => {
     );
   }
 
-  // Sepete ekleme fonksiyonu
   const handleAddToCart = (movie) => {
     props.addToCart(movie); 
   };
@@ -82,7 +80,7 @@ const MovieList = (props) => {
                         className="btn btn-md btn-outline-primary"
                         to={`edit/${movie.id}`}
                       >
-                        Düzenle
+                        Filmi Düzenle
                       </Link>
 
                       <DeleteModal
@@ -114,7 +112,7 @@ const MovieList = (props) => {
                         }}
                         onClick={() => handleAddToCart(movie)}
                         onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = "#28a745"; // Üzerine gelince yeşil
+                          e.target.style.backgroundColor = "#28a745";
                           e.target.style.color = "#fff"; 
                         }}
                         onMouseLeave={(e) => {

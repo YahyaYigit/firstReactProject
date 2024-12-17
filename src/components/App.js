@@ -11,7 +11,7 @@ import Footer from "./Footer";
 import NavBar from "./Navbar";
 import About from "./About";
 import Contact from "./Contact";
-import CartPage from "./CartPage"; // Sepet Sayfası
+import CartPage from "./CartPage";
 import "./SideBar.css";
 
 function App() {
@@ -200,9 +200,7 @@ function App() {
           
           </Routes>
 
-        
-
-        <div className="container" style={{ marginTop: "20px" }}>
+        <div className="container">
           <Routes>
             <Route
               path="/"

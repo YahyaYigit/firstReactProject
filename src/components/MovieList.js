@@ -4,19 +4,17 @@ import { Link } from "react-router-dom";
 import { Pagination } from "react-bootstrap";
 
 const MovieList = (props) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [activePage, setActivePage] = useState(1);
   const moviesPerPage = 9;
 
   const truncateOverview = (string, maxLength) => {
-    if (!string) return null;
-    return string.length <= maxLength ? string : `${string.substring(0, maxLength)} ...`;
+    return string?.length > maxLength ? `${string.substring(0, maxLength)}...` : string;
   };
 
   const handleCategoryClick = (categoryId) => {
     setSelectedCategory(categoryId);
-    setActivePage(1); 
+    setActivePage(1);
   };
 
   const filteredMovies = props.movies.filter((movie) => {
@@ -53,7 +51,7 @@ const MovieList = (props) => {
   }
 
   const handleAddToCart = (movie) => {
-    props.addToCart(movie); 
+    props.addToCart(movie);  
   };
 
   return (
@@ -106,18 +104,18 @@ const MovieList = (props) => {
                         className="btn btn-md"
                         style={{
                           backgroundColor: "transparent",
-                          border: "2px solid #28a745", 
-                          color: "#28a745", 
-                          transition: "all 0.3s ease", 
+                          border: "2px solid #28a745",
+                          color: "#28a745",
+                          transition: "all 0.3s ease",
                         }}
                         onClick={() => handleAddToCart(movie)}
                         onMouseEnter={(e) => {
                           e.target.style.backgroundColor = "#28a745";
-                          e.target.style.color = "#fff"; 
+                          e.target.style.color = "#fff";
                         }}
                         onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = "transparent"; 
-                          e.target.style.color = "#28a745"; 
+                          e.target.style.backgroundColor = "transparent";
+                          e.target.style.color = "#28a745";
                         }}
                       >
                         Sepete Ekle

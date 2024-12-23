@@ -20,10 +20,15 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [showAddToCartMessage, setShowAddToCartMessage] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
 
   useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(savedCart);
+
     const fetchMovies = async () => {
       const response = await axios.get("https://localhost:7070/api/Film");
       if (response) {
@@ -53,6 +58,10 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const searchMovie = (event) => {
     setSearchQuery(event.target.value);
     filterMovies(event.target.value, selectedCategory);
@@ -74,6 +83,7 @@ function App() {
   const handleCategoryClick = (categoryId) => {
     setSelectedCategory(categoryId);
     filterMovies(searchQuery, categoryId);
+    setIsMenuOpen(false);
   };
 
   const deleteMovie = async (movie) => {
@@ -84,7 +94,6 @@ function App() {
       const newMovieList = movies.filter((m) => m.id !== movie.id);
       setMovies(newMovieList);
       setFilteredMovies(newMovieList);
-      console.log("Film başarıyla silindi!");
     } catch (error) {
       console.error("Silme işlemi sırasında hata:", error);
     }
@@ -111,6 +120,30 @@ function App() {
     setFilteredMovies(newMovieList.sort((a, b) => b.rating - a.rating));
   };
 
+  const addToCart = (movie) => {
+    const isProductInCart = cart.some((item) => item.id === movie.id);
+  
+    if (isProductInCart) {
+      alert("Bu ürün zaten sepete eklendi.");
+    } else {
+      setCart((prevCart) => [...prevCart, movie]);
+      setShowAddToCartMessage(true);
+  
+      setTimeout(() => {
+        setShowAddToCartMessage(false);
+      }, 2000);
+    }
+  };
+
+  const removeFromCart = (movieId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== movieId));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+    localStorage.setItem("cart", JSON.stringify([])); 
+  };
+
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
   };
@@ -118,87 +151,97 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <NavBar toggleMenu={toggleMenu} />
+        <NavBar toggleMenu={toggleMenu} cartLength={cart.length} />
+        {showAddToCartMessage && (
+          <>
+            <div className="overlay"></div>
+            <div className="add-to-cart-message">
+              Sepete başarılı bir şekilde eklendi!
+            </div>
+          </>
+        )}
 
         <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <button
-          ref={buttonRef}
-          onClick={toggleMenu}
-          className={`hamburger-btn ${isMenuOpen ? "open" : ""}`}
-        >
-          ☰
-        </button>
+          <Route
+            path="/"
+            element={
+              <>
+                <button
+                  ref={buttonRef}
+                  onClick={toggleMenu}
+                  className={`hamburger-btn ${isMenuOpen ? "open" : ""}`}
+                >
+                  ☰
+                </button>
 
-        <div ref={menuRef} className={`side-menu ${isMenuOpen ? "open" : ""}`}>
-          <h3>Kategoriler</h3>
-          <ul>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("")}
-              >
-                Ana Sayfa
-              </button>
-            </li>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("1")}
-              >
-                Savaş
-              </button>
-            </li>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("2")}
-              >
-                Aksiyon
-              </button>
-            </li>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("3")}
-              >
-                Korku
-              </button>
-            </li>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("4")}
-              >
-                Gerilim
-              </button>
-            </li>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("5")}
-              >
-                Komedi
-              </button>
-            </li>
-            <li>
-              <button
-                className="btn fs-4"
-                onClick={() => handleCategoryClick("6")}
-              >
-                Çizgi Film
-              </button>
-            </li>
-          </ul>
-        </div>
-                </>
-              }
-            />
-          
-          </Routes>
+                <div
+                  ref={menuRef}
+                  className={`side-menu ${isMenuOpen ? "open" : ""}`}
+                >
+                  <h3>Kategoriler</h3>
+                  <ul>
+                    <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("")}
+                      >
+                        Ana Sayfa
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("1")}
+                      >
+                        Savaş
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("2")}
+                      >
+                        Aksiyon
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("3")}
+                      >
+                        Korku
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("4")}
+                      >
+                        Gerilim
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("5")}
+                      >
+                        Komedi
+                      </button>
+                      <li>
+                      <button
+                        className="btn fs-4"
+                        onClick={() => handleCategoryClick("6")}
+                      >
+                        Çizgi Film
+                      </button>
+                    </li>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            }
+          />
+        </Routes>
 
         <div className="container">
           <Routes>
@@ -216,6 +259,7 @@ function App() {
                       movies={filteredMovies}
                       deleteMovieProp={deleteMovie}
                       updateMovieProp={updateMovieInList}
+                      addToCart={addToCart}
                     />
                   )}
                   <FaqCom />
@@ -230,7 +274,10 @@ function App() {
             />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/cart" element={<CartPage />} /> 
+            <Route
+              path="/cart"
+              element={<CartPage cartItems={cart} removeFromCart={removeFromCart} clearCart={clearCart} />}
+            />
           </Routes>
         </div>
 

@@ -30,7 +30,6 @@ function AddMovie(props) {
 
       const filmsResponse = await axios.get("https://localhost:7070/api/Film");
 
-      //props.onAddMovie(filmsResponse.data);
 
       navigate("/");
 
@@ -78,7 +77,7 @@ function AddMovie(props) {
           </div>
           <div className="form-group col-md-4 ps-md-4">
             <label htmlFor="inputRating">Rating</label>
-            <input type="number" className="form-control"  placeholder="Enter the movie rating" name="rating" required />
+            <input type="number" className="form-control" step="any"  placeholder="Enter the movie rating" name="rating" required />
           </div>
         </div>
 
@@ -113,7 +112,7 @@ function AddMovie(props) {
           <textarea
             className="form-control"
             name="overview"
-            rows="5"
+            rows="4"
              placeholder="Enter the movie overview"
             required
           ></textarea>
